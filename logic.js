@@ -1,14 +1,4 @@
-//when "Start Quiz" button is clicked- timer starts
-//hide button and intro text
-//remove hide from q1. Q1 appears.
-// Answer is selected
-//  if play correct sound, +1 score, save score LS, next question.
-//  if incorrect, play incorrect sound, nor score, decrement timer, next question.
-// repeat
-// End, enter initials on highscore page.
-// retrieve any highscores from local storage.
-// save score to local storage.
-//variable initialisation
+
 let startButtonEl = document.getElementById("start");
 let startTextAtt = document.getElementById("start-screen")
 //question phase
@@ -29,29 +19,39 @@ let userInitial = document.getElementById("initials");
 let user ="";
 let score = 0;
 
+let audioElCorrect = document.createElement("audio");
+audioElCorrect.setAttribute("src","./assets/sfx/correct.wav");
+audioElCorrect.setAttribute("id","correctAudio");
+let fb = document.getElementById("feedback");
+fb.appendChild(audioElCorrect);
+let playCorrect = document.getElementById("correctAudio");
+
+let audioElIncorrect = document.createElement("audio");
+audioElIncorrect.setAttribute("src","./assets/sfx/incorrect.wav");
+audioElIncorrect.setAttribute("id","incorrectAudio");
+fb.appendChild(audioElIncorrect);
+let playIncorrect = document.getElementById("incorrectAudio");
+
+
+let feedbackText = document.createElement("h1");
+fb.setAttribute("class","");
+fb.appendChild(feedbackText);
+feedbackText.textContent = "";
+
+let correctText = "Correct ✅"
+let incorrectText ="Incorrect ❌"
+
+
+function hideFeedback(){
+    fb.setAttribute("class", "hide");
+}
+
+console.log(document.body);
+
 
 import { questions } from './questions.js';
 
-// document.createElement("audio");
-// document.body.appendChild(correctAudio);
-// correctAudio.setAttribute("id","audioCorrect");
-// correctAudio.setAttribute("src","assets/sfx/correct.wav");
-// var correct = document.getElementById("audioCorrect");
 
-// var incorrectAudio = document.body.createElement("audio");
-// document.body.appendChild(incorrectAudio);
-// incorrectAudio.setAttribute("id","audioIncorrect");
-// incorrectAudio.setAttribute("src","assets/sfx/incorrect.wav");
-// var incorrect = document.body.getElementById("audioIncorrect");
-
-// function playCorrect(){
-//     correct.play();
-// }
-
-// function playIncorrrect(){
-//     incorrect.play();
-// }
-//codestart
 startButtonEl.addEventListener("click", function () {
 
     startTextAtt.className = "hide";
@@ -61,7 +61,7 @@ startButtonEl.addEventListener("click", function () {
 
 });
 
-//question1
+//Q1
 function displayQuestions() {
     console.log(timeRemaining);
     questionEl.setAttribute("class", "");
@@ -78,12 +78,14 @@ function displayQuestions() {
         console.log(window.document.body.children[4]);
     }
 
-    //code to check correct answer q1.
+//Q1 Check.
     function checkAnswer(event) {
 
         let response = Number(event.target.getAttribute("data-index"))
         if (response === 0) {
             console.log("Correct");
+            playCorrect.play();
+            feedbackText.textContent = correctText;
             score++;
             let buttons = choiceContainer.querySelectorAll('button');
             buttons.forEach((button) => {
@@ -93,6 +95,8 @@ function displayQuestions() {
 
         } else {
             console.log("Wrong");
+            playIncorrect.play();
+            feedbackText.textContent = incorrectText;
             timeRemaining -= 10;
             let buttons = choiceContainer.querySelectorAll('button');
             buttons.forEach((button) => {
@@ -105,7 +109,7 @@ function displayQuestions() {
 }
 
 
-//question2
+//Q2
 function displayQuestionsTwo() {
     questionEl.setAttribute("class", "");
     questionTitle.innerHTML = questions[1].question;
@@ -122,12 +126,14 @@ function displayQuestionsTwo() {
     }
 }
 
-//code to check correct answer q.2
+//Q2 Check
 function checkAnswerTwo(event) {
 
     let response = Number(event.target.getAttribute("data-index"))
-    if (response === 3) {
+    if (response === 3) { 
         console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
         score++;
         let buttons = choiceContainer.querySelectorAll('button');
         buttons.forEach((button) => {
@@ -136,6 +142,8 @@ function checkAnswerTwo(event) {
         displayQuestionsThree();
     } else {
         console.log("Wrong");
+        playIncorrect.play();
+        feedbackText.textContent = incorrectText;
         timeRemaining -= 10;
         let buttons = choiceContainer.querySelectorAll('button');
         buttons.forEach((button) => {
@@ -146,28 +154,358 @@ function checkAnswerTwo(event) {
     }
 
 }
-//question 3
+
+
+//Q3
 function displayQuestionsThree() {
     questionEl.setAttribute("class", "");
-    questionTitle.innerHTML = questions[2].question;
+    questionTitle.innerHTML = questions[2].question; //change
 
-    for (var i = 0; i < questions[2].answers.length; i++) {
+    for (var i = 0; i < questions[2].answers.length; i++) { //change
         let j = i + 1;
         let choiceButton = document.createElement('button');
         choiceButton.setAttribute("data-index", i);
-        choiceButton.textContent = j + " " + questions[2].answers[i];
+        choiceButton.textContent = j + " " + questions[2].answers[i]; //change
         choiceContainer.appendChild(choiceButton);
-        choiceButton.addEventListener("click", checkAnswerThree);
+        choiceButton.addEventListener("click", checkAnswerThree); //change;
 
         console.log(window.document.body.children[4]);
     }
 }
 
-function checkAnswerThree(event) {
+//Q3 Check
+function checkAnswerThree(event) { //change
 
     let response = Number(event.target.getAttribute("data-index"))
-    if (response === 0) {
+    if (response === 0) { 
         console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
+        score++;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsFour(); //change
+    } else {
+        console.log("Wrong");
+        playIncorrect.play();
+        feedbackText.textContent = incorrectText;
+        timeRemaining -= 10;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsFour(); //change
+
+    }
+
+}
+
+
+//Q4
+function displayQuestionsFour() {
+    questionEl.setAttribute("class", "");
+    questionTitle.innerHTML = questions[3].question; //change
+
+    for (var i = 0; i < questions[3].answers.length; i++) { //change
+        let j = i + 1;
+        let choiceButton = document.createElement('button');
+        choiceButton.setAttribute("data-index", i);
+        choiceButton.textContent = j + " " + questions[3].answers[i]; //change
+        choiceContainer.appendChild(choiceButton);
+        choiceButton.addEventListener("click", checkAnswerFour); //change;
+
+        console.log(window.document.body.children[4]);
+    }
+}
+
+//Q4 Check
+function checkAnswerFour(event) { //change
+
+    let response = Number(event.target.getAttribute("data-index"))
+    if (response === 1) { 
+        console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
+        score++;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsFive(); //change
+    } else {
+        console.log("Wrong");
+        playIncorrect.play();
+        feedbackText.textContent = incorrectText;
+        timeRemaining -= 10;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsFive(); //change
+
+    }
+
+}
+
+
+
+//Q5
+function displayQuestionsFive() {
+    questionEl.setAttribute("class", "");
+    questionTitle.innerHTML = questions[4].question; //change
+
+    for (var i = 0; i < questions[4].answers.length; i++) { //change
+        let j = i + 1;
+        let choiceButton = document.createElement('button');
+        choiceButton.setAttribute("data-index", i);
+        choiceButton.textContent = j + " " + questions[4].answers[i]; //change
+        choiceContainer.appendChild(choiceButton);
+        choiceButton.addEventListener("click", checkAnswerFive); //change;
+
+        console.log(window.document.body.children[4]);
+    }
+}
+
+//Q5 Check
+function checkAnswerFive(event) { //change
+
+    let response = Number(event.target.getAttribute("data-index"))
+    if (response === 3) {  // place correct answer as opt 4.
+        console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
+        score++;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsSix(); //change
+    } else {
+        console.log("Wrong");
+        playIncorrect.play();
+        feedbackText.textContent = incorrectText;
+        timeRemaining -= 10;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsSix(); //change
+
+    }
+
+}
+
+///
+//Q6
+function displayQuestionsSix() {
+    questionEl.setAttribute("class", "");
+    questionTitle.innerHTML = questions[5].question; //change
+
+    for (var i = 0; i < questions[5].answers.length; i++) { //change
+        let j = i + 1;
+        let choiceButton = document.createElement('button');
+        choiceButton.setAttribute("data-index", i);
+        choiceButton.textContent = j + " " + questions[5].answers[i]; //change
+        choiceContainer.appendChild(choiceButton);
+        choiceButton.addEventListener("click", checkAnswerSix); //change;
+
+        console.log(window.document.body.children[4]);
+    }
+}
+
+//Q6 Check
+function checkAnswerSix(event) { //change
+
+    let response = Number(event.target.getAttribute("data-index"))
+    if (response === 2) { 
+        console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
+        score++;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsSeven(); //change
+    } else {
+        console.log("Wrong");
+        playIncorrect.play();
+        feedbackText.textContent = incorrectText;
+        timeRemaining -= 10;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsSeven(); //change
+
+    }
+
+}
+
+//Q7
+function displayQuestionsSeven() {
+    questionEl.setAttribute("class", "");
+    questionTitle.innerHTML = questions[6].question; //change
+
+    for (var i = 0; i < questions[6].answers.length; i++) { //change
+        let j = i + 1;
+        let choiceButton = document.createElement('button');
+        choiceButton.setAttribute("data-index", i);
+        choiceButton.textContent = j + " " + questions[6].answers[i]; //change
+        choiceContainer.appendChild(choiceButton);
+        choiceButton.addEventListener("click", checkAnswerSeven); //change;
+
+        console.log(window.document.body.children[4]);
+    }
+}
+
+//Q7 Check
+function checkAnswerSeven(event) { //change
+
+    let response = Number(event.target.getAttribute("data-index"))
+    if (response === 2) { 
+        console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
+        score++;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsEight(); //change
+    } else {
+        console.log("Wrong");
+        playIncorrect.play();
+        timeRemaining -= 10;
+        feedbackText.textContent = incorrectText;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsEight(); //change
+
+    }
+
+}
+
+//Q8
+function displayQuestionsEight() {
+    questionEl.setAttribute("class", "");
+    questionTitle.innerHTML = questions[7].question; //change
+
+    for (var i = 0; i < questions[7].answers.length; i++) { //change
+        let j = i + 1;
+        let choiceButton = document.createElement('button');
+        choiceButton.setAttribute("data-index", i);
+        choiceButton.textContent = j + " " + questions[7].answers[i]; //change
+        choiceContainer.appendChild(choiceButton);
+        choiceButton.addEventListener("click", checkAnswerEight); //change;
+
+        console.log(window.document.body.children[4]);
+    }
+}
+
+//Q8 Check
+function checkAnswerEight(event) { //change
+
+    let response = Number(event.target.getAttribute("data-index"))
+    if (response === 3) { 
+        console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
+        score++;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsNine(); //change
+    } else {
+        console.log("Wrong");
+        playIncorrect.play();
+        feedbackText.textContent = incorrectText;
+        timeRemaining -= 10;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsNine(); //change
+
+    }
+
+}
+
+//Q9
+function displayQuestionsNine() {
+    questionEl.setAttribute("class", "");
+    questionTitle.innerHTML = questions[8].question; //change
+
+    for (var i = 0; i < questions[8].answers.length; i++) { //change
+        let j = i + 1;
+        let choiceButton = document.createElement('button');
+        choiceButton.setAttribute("data-index", i);
+        choiceButton.textContent = j + " " + questions[8].answers[i]; //change
+        choiceContainer.appendChild(choiceButton);
+        choiceButton.addEventListener("click", checkAnswerNine); //change;
+
+        console.log(window.document.body.children[4]);
+    }
+}
+
+//Q9 Check
+function checkAnswerNine(event) { //change
+
+    let response = Number(event.target.getAttribute("data-index"))
+    if (response === 1) { // <----
+        console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
+        score++;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsTen(); //change
+    } else {
+        console.log("Wrong");
+        playIncorrect.play();
+        feedbackText.textContent = incorrectText;
+        timeRemaining -= 10;
+        let buttons = choiceContainer.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.remove();
+        });
+        displayQuestionsTen(); //change
+
+    }
+
+}
+
+
+function displayQuestionsTen() {
+    questionEl.setAttribute("class", "");
+    questionTitle.innerHTML = questions[9].question; //reference to Q. index in questions.js
+
+    for (var i = 0; i < questions[9].answers.length; i++) {
+        let j = i + 1;
+        let choiceButton = document.createElement('button');
+        choiceButton.setAttribute("data-index", i);
+        choiceButton.textContent = j + " " + questions[9].answers[i]; //appending the text content of the question properties;
+        choiceContainer.appendChild(choiceButton);
+        choiceButton.addEventListener("click", checkAnswerTen);
+
+        console.log(window.document.body.children[4]);
+    }
+}
+
+function checkAnswerTen(event) {
+
+    let response = Number(event.target.getAttribute("data-index"))
+    if (response === 2) {
+        console.log("Correct");
+        playCorrect.play();
+        feedbackText.textContent = correctText;
         score++;
         let buttons = choiceContainer.querySelectorAll('button');
         buttons.forEach((button) => {
@@ -176,6 +514,8 @@ function checkAnswerThree(event) {
         endPhase();
     } else {
         console.log("Wrong");
+        playIncorrect.play();
+        feedbackText.textContent = incorrectText;
         let buttons = choiceContainer.querySelectorAll('button');
         buttons.forEach((button) => {
             button.remove();
@@ -184,20 +524,20 @@ function checkAnswerThree(event) {
 
     }
 }
+
 function timer() {
     if (timeRemaining > 0) {
         timeRemaining--;
         countdownTimer.innerHTML = timeRemaining;
     } else {
         clearInterval(timeInterval);
-        countdownTimer.innerHTML = "";
-        gameEndEl.setAttribute("class", "feedback");
-        questionEl.setAttribute("class", "hide");
-
+        endPhase();
+      
     }
 }
 
 function endPhase() {
+    hideFeedback();
     clearInterval(timeInterval);
     questionEl.setAttribute("class", "hide");
     gameEndEl.setAttribute("class", "feedback");
@@ -222,32 +562,3 @@ function endPhase() {
 
 }
 
-
-// function saveScore(event) {
-    
-//     event.preventDefault();
-    // user = userInitial.value.trim();
-
-    // result.initials = user;
-    // result.score =score;
-//     console.log(arr);
-//     arr = arr.push(result);
-//     let x =JSON.stringify(arr);
-//     localStorage.setItem("user",x);
-//     // localStorage.setItem("user",user);
-//     // localStorage.setItem("score",score);
-    
-//     resultIndex ++;
-//     console.log(resultIndex);
-// }
-
-
-//audio functions:
-
-// function correctSound() {
-
-// }
-
-// function incrementPlayCount(){
-//     playerId = playerId ++;
-// }
