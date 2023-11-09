@@ -16,9 +16,9 @@ let questions = [
 },
 {
     //Q3
-    question: "What is the capital of Israel",
-    answers: ["Jerusalem", "Tel-Aviv", "Haifa", "Eliat"],
-    correctAnswer: "Jerusalem"
+    question: "What is the capital of Estonia",
+    answers: ["Talinn", "Vilnius", "Riga", "Tartu"],
+    correctAnswer: "Talinn"
 },
 {
     //Q4
